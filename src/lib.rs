@@ -1,7 +1,3 @@
-mod d3d9_util;
-mod hook;
-mod process;
-
 use {
   std::thread,
   winapi::{
@@ -14,13 +10,22 @@ use {
   }
 };
 
+mod d3d9_util;
+mod hook;
+mod process;
+
 unsafe fn init() {
   AllocConsole();
-  let result = d3d9_util::get_d3d9_vtable();
+  let hwnd = match process::get_process_window() {
+    Some(hwnd) => hwnd,
+    _ => panic!("Failed to find current process windo hwnd"),
+  };
+  let result = d3d9_util::get_d3d9_vtable(hwnd);
   match result {
     Ok(v) => {
       println!("d3d9Device[42]: {:p}", *v.get(42).unwrap());
-      hook::hook_functions(v);
+      hook::hook_device_functions(v);
+      hook::hook_wnd_proc(hwnd);
     },
     Err(s) => println!("Error finding vtable addresses: {}", s),
   }

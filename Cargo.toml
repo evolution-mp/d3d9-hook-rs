@@ -6,12 +6,11 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[build]
-#target = "stable-i686-pc-windows-msvc"
-
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
 detour = "0.7.1"
+imgui = "0.4"
+imgui-dx9-renderer = "0.4"
 winapi = { version = "0.3.9", features = ["minwindef", "windef", "winnt", "winuser", "consoleapi", "libloaderapi", "processthreadsapi", "d3d9", "d3d9types"] }
